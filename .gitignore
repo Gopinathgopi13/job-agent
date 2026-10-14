@@ -1,0 +1,39 @@
+# ── secrets ────────────────────────────────────────────────────────
+# .env holds the Naukri email(s) the app remembers. Never published.
+.env
+.env.*
+!.env.example
+
+# Personal answers — copy config.example.json to config.json
+config.json
+
+# ── local environment ──────────────────────────────────────────────
+venv/
+.venv/
+.setup_complete
+
+# ── python ─────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# ── build output (regenerate with packaging/jobsprint.spec) ────────
+build/
+dist/
+dist_installer/
+*.spec.bak
+
+# ── superseded local data ──────────────────────────────────────────
+# Pre-rename app data, kept on disk but never published. Live data lives
+# outside the repo entirely (see jobsprint/paths.py).
+.legacy-data/
+
+# ── editor / OS noise ──────────────────────────────────────────────
+.claude/
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# NOTE: the launchers (jobsprint.bat / jobsprint.sh) and setup/ scripts are
+# deliberately NOT ignored — they are how anyone cloning this runs the app.

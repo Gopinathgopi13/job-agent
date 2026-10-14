@@ -1,0 +1,28 @@
+# JobSprint dependencies — direct requirements only; pip resolves the rest.
+#
+# Install with:  pip install -r requirements.txt
+# Then one time: python -m playwright install chromium
+
+# ── browser automation ─────────────────────────────────────────────
+playwright==1.49.0
+
+# ── terminal interface ─────────────────────────────────────────────
+rich==13.9.4                 # panels, colour, the wordmark
+questionary==2.1.1           # arrow-key menus
+colorama==0.4.6              # ANSI support on older Windows consoles
+
+# ── answering application questions ────────────────────────────────
+rapidfuzz==3.14.5            # fuzzy question matching
+python-dotenv==1.2.3         # reads .env
+pdfplumber==0.11.10          # pulls skills out of your resume PDF
+
+# ── desktop dashboard (python -m jobsprint.desktop) ────────────────
+fastapi==0.141.1
+uvicorn==0.52.3
+websockets==17.0.1           # uvicorn's WebSocket transport for live updates
+python-multipart==0.0.32     # resume upload endpoint
+pydantic==2.13.4
+openpyxl==3.1.5              # Excel tracker of applications
+pywebview==6.2.1             # native window around the dashboard
+pythonnet==3.1.0; sys_platform == "win32"    # pywebview's Windows backend
+clr_loader==0.3.1; sys_platform == "win32"   # ditto

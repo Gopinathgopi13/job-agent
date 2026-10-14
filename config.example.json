@@ -1,0 +1,51 @@
+{
+    "__README__": [
+        "Copy this file to config.json and fill it in. config.json is gitignored.",
+        "Fields set in the dashboard's Profile tab (stored per-machine) override this file.",
+        "Delete a line, or leave it blank, to fall back to the built-in default.",
+        "Keys starting with '__' are comments and are ignored."
+    ],
+
+    "Salutation": "Mr",
+    "Full name": "Your Name",
+    "First name": "Your",
+    "Last name": "Name",
+    "Email": "you@example.com",
+    "Mobile": "9876543210",
+    "Date of birth": "01-01-1995",
+    "Gender": "Male",
+    "Father's name": "",
+    "Mother's name": "",
+    "Marital status": "Single",
+
+    "Location": "Hyderabad",
+    "Current location": "Hyderabad",
+    "Preferred work location": "Hyderabad, Bengaluru, Pune",
+    "Relocate": "Yes",
+    "Open to relocate": "Yes",
+
+    "Total experience": "5",
+    "Current CTC": "9 LPA",
+    "Salary": "9 LPA",
+    "Expected salary": "15 LPA",
+    "Notice period": "15",
+    "Notice period negotiable": "Yes",
+    "Immediately available": "Yes",
+
+    "Highest qualification": "B.Tech",
+    "Passport": "Yes",
+    "Shift willingness": "Yes",
+    "Vehicle": "Yes",
+    "Work authorization": "Yes",
+    "Visa sponsorship required": "No",
+
+    "Resume path": "C:/Users/you/Documents/resume.pdf",
+    "Cover letter": "",
+
+    "Job roles": ["DevOps Engineer", "Site Reliability Engineer"],
+    "Skip companies": ["Example Staffing Ltd"],
+    "Skip title keywords": ["Intern", "Sales"],
+    "Skip job links": [],
+
+    "Skills": { "AWS": "5", "Docker": "5", "Kubernetes": "5", "Terraform": "5" }
+}

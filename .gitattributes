@@ -1,0 +1,6 @@
+# Normalize line endings so scripts don't break when checked out on a
+# different OS than they were committed from.
+* text=auto eol=lf
+
+*.bat text eol=crlf
+*.sh  text eol=lf

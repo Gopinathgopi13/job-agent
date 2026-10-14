@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JobSprint</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <header>
+        <h1>JobSprint</h1>
+        <div class="header-right">
+            <span class="status-badge" id="status-badge" data-status="idle">
+                <span class="dot"></span><span id="status-label">Idle</span>
+            </span>
+            <button class="secondary" id="stop-btn" disabled>Stop</button>
+            <button class="primary" id="start-btn">Start Applying</button>
+        </div>
+    </header>
+
+    <nav class="tabs">
+        <button class="tab-link active" data-tab="dashboard">Dashboard</button>
+        <button class="tab-link" data-tab="profile">Profile</button>
+        <button class="tab-link" data-tab="applications">Applications</button>
+        <button class="tab-link" data-tab="kb">Knowledge Base</button>
+        <button class="tab-link" data-tab="preferences">Preferences</button>
+    </nav>
+
+    <main>
+        <section class="tab-panel active" id="tab-dashboard">
+            <div class="stats-grid">
+                <div class="stat-card"><div class="value" id="stat-scanned">0</div><div class="label">Jobs Scanned</div></div>
+                <div class="stat-card"><div class="value" id="stat-matched">0</div><div class="label">Matching Jobs</div></div>
+                <div class="stat-card"><div class="value" id="stat-submitted">0</div><div class="label">Applications Submitted</div></div>
+                <div class="stat-card warn"><div class="value" id="stat-needs-input">0</div><div class="label">Needs Your Input</div></div>
+                <div class="stat-card"><div class="value" id="stat-external">0</div><div class="label">External Links Collected</div></div>
+                <div class="stat-card"><div class="value" id="stat-learned">0</div><div class="label">Questions Learned</div></div>
+            </div>
+
+            <div class="panel">
+                <h2>Current Activity</h2>
+                <div class="activity-line" id="activity-line">Idle</div>
+                <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+            </div>
+
+            <div class="panel">
+                <h2>Live Log</h2>
+                <div id="log"><div class="line empty">Waiting for activity…</div></div>
+            </div>
+        </section>
+
+        <section class="tab-panel" id="tab-profile">
+            <div class="panel" id="profile-first-run-banner" style="display: none; border-color: var(--accent-dim); background: var(--accent-dim);">
+                <strong>Welcome — fill this in before applying.</strong> This is the information the bot uses to answer
+                application questions. Nothing here is guessed; anything not covered will pause the run and ask you.
+            </div>
+            <div class="panel">
+                <h2>Personal &amp; Career Details</h2>
+                <div class="form-grid">
+                    <div class="form-field">
+                        <label for="profile-salutation">Salutation</label>
+                        <input type="text" id="profile-salutation" placeholder="Mr / Ms / Mrs">
+                    </div>
+                    <div class="form-field">
+                        <label for="profile-full-name">Full name</label>
+                        <input type="text" id="profile-full-name">
+                    </div>
+                    <div class="form-field">
+                        <label for="profile-first-name">First name</label>
+                        <input type="text" id="profile-first-name">
+                    </div>
+                    <div class="form-field">
+                        <label for="profile-last-name">Last name</label>
+                        <input type="text" id="profile-last-name">
+                    </div>
+                    <div class="form-field">
+                        <label for="profile-location">Current location</label>
+                        <input type="text" id="profile-location">
+                    </div>
+                    <div class="form-field">
+                        <label for="profile-preferred-location">Preferred work location</label>
+                        <input type="text" id="profile-preferred-location" placeholder="City1, City2, City3">
+                    </div>
+                    <div class="form-field">
+                        <label for="profile-total-experience">Total experience (years)</label>
+                        <input type="text" id="profile-total-experience">
+                    </div>
+                    <div class="form-field">
+                        <label for="profile-current-ctc">Current CTC</label>
+                        <input type="text" id="profile-current-ctc">
+                    </div>
+                    <div class="form-field">
+                        <label for="profile-expected-salary">Expected salary</label>
+                        <input type="text" id="profile-expected-salary">
+                    </div>
+                    <div class="form-field">
+                        <label for="profile-notice-period">Notice period (days)</label>
+                        <input type="text" id="profile-notice-period">
+                    </div>
+                    <div class="form-field">
+                        <label for="profile-mobile">Mobile</label>
+                        <input type="text" id="profile-mobile">
+                    </div>
+                    <div class="form-field">
+                        <label for="profile-email">Email</label>
+                        <input type="text" id="profile-email">
+                    </div>
+                    <div class="form-field">
+                        <label for="profile-dob">Date of birth</label>
+                        <input type="text" id="profile-dob" placeholder="DD/MM/YYYY">
+                    </div>
+                    <div class="form-field">
+                        <label for="profile-gender">Gender</label>
+                        <input type="text" id="profile-gender">
+                    </div>
+                    <div class="form-field">
+                        <label for="profile-relocate">Willing to relocate</label>
+                        <input type="text" id="profile-relocate" placeholder="Yes / No">
+                    </div>
+                    <div class="form-field">
+                        <label for="profile-qualification">Highest qualification</label>
+                        <input type="text" id="profile-qualification">
+                    </div>
+                    <div class="form-field">
+                        <label for="profile-resume-path">Resume path</label>
+                        <input type="text" id="profile-resume-path" readonly placeholder="Upload a resume in Preferences">
+                    </div>
+                    <div class="form-field" style="grid-column: 1 / -1;">
+                        <label for="profile-skills">Skills (one per line: Skill: years)</label>
+                        <textarea id="profile-skills" placeholder="AWS: 4&#10;Docker: 3&#10;Kubernetes: 3"></textarea>
+                    </div>
+                    <div class="form-field" style="grid-column: 1 / -1;">
+                        <label for="profile-cover-letter">Cover letter</label>
+                        <textarea id="profile-cover-letter"></textarea>
+                    </div>
+                </div>
+                <button class="primary" id="profile-save-btn">Save Profile</button>
+                <span class="save-status" id="profile-save-status"></span>
+            </div>
+        </section>
+
+        <section class="tab-panel" id="tab-applications">
+            <div class="panel">
+                <div class="search-bar">
+                    <select id="app-status-filter">
+                        <option value="">All statuses</option>
+                        <option value="Submitted">Submitted</option>
+                        <option value="Captured - Not Applied">Captured - Not Applied</option>
+                        <option value="needs_input_timeout">Needs input (timed out)</option>
+                    </select>
+                    <button class="secondary" id="app-refresh-btn">Refresh</button>
+                </div>
+                <div style="overflow-x: auto;">
+                    <table class="data-table" id="applications-table">
+                        <thead>
+                            <tr>
+                                <th>Date &amp; Time</th><th>Company</th><th>Job Role</th>
+                                <th>Experience</th><th>Salary/CTC</th><th>Type</th>
+                                <th>Status</th><th>Link</th>
+                            </tr>
+                        </thead>
+                        <tbody id="applications-tbody">
+                            <tr><td colspan="8" class="placeholder">No applications yet.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section class="tab-panel" id="tab-kb">
+            <div class="panel">
+                <div class="search-bar">
+                    <input type="text" id="kb-search-input" placeholder="Search questions or answers…">
+                    <select id="kb-source-filter">
+                        <option value="">All sources</option>
+                        <option value="static_profile">From profile</option>
+                        <option value="computed">Computed</option>
+                        <option value="user_taught">Learned from you</option>
+                    </select>
+                </div>
+                <div style="overflow-x: auto;">
+                    <table class="data-table" id="kb-table">
+                        <thead>
+                            <tr>
+                                <th>Question</th><th>Answer</th><th>Source</th>
+                                <th>Used</th><th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="kb-tbody">
+                            <tr><td colspan="5" class="placeholder">No knowledge base entries yet.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section class="tab-panel" id="tab-preferences">
+            <div class="panel">
+                <h2>Job Search Preferences</h2>
+                <div class="form-grid">
+                    <div class="form-field" style="grid-column: 1 / -1;">
+                        <label for="pref-role">Job role to search</label>
+                        <input type="text" id="pref-role" placeholder="DevOps Engineer">
+                        <div class="hint">One role per session — the same single keyword Naukri's own search takes.</div>
+                    </div>
+                    <div class="form-field">
+                        <label for="pref-location">Location</label>
+                        <input type="text" id="pref-location" placeholder="Any">
+                    </div>
+                    <div class="form-field">
+                        <label for="pref-experience">Experience (years)</label>
+                        <input type="number" id="pref-experience" min="0" max="30">
+                    </div>
+                    <div class="form-field">
+                        <label for="pref-job-age">Max job posting age (days)</label>
+                        <input type="number" id="pref-job-age" min="1">
+                    </div>
+                    <div class="form-field">
+                        <label for="pref-jobs-target">Default jobs per session</label>
+                        <input type="number" id="pref-jobs-target" min="1">
+                    </div>
+                    <div class="form-field">
+                        <label for="pref-timeout">Question timeout (minutes)</label>
+                        <input type="number" id="pref-timeout" min="1">
+                        <div class="hint">How long to wait for you to answer a new question before skipping the job.</div>
+                    </div>
+                    <div class="form-field checkbox-field">
+                        <input type="checkbox" id="pref-auto-external">
+                        <label for="pref-auto-external">Attempt external applications automatically (not recommended)</label>
+                    </div>
+                </div>
+                <button class="primary" id="pref-save-btn">Save Preferences</button>
+                <span class="save-status" id="pref-save-status"></span>
+            </div>
+
+            <div class="panel">
+                <h2>Resume</h2>
+                <div class="job-ctx">Upload your resume to extract skills used for job-match scoring. This never changes your stored profile answers.</div>
+                <input type="file" id="resume-file-input" accept="application/pdf">
+                <button class="secondary" id="resume-upload-btn" style="margin-left: 10px;">Upload &amp; Analyze</button>
+                <div class="job-ctx" id="resume-status"></div>
+                <div class="skill-chip-list" id="resume-skills"></div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Start session -->
+    <div class="modal-overlay" id="start-modal-overlay">
+        <div class="modal">
+            <h3>Start Applying</h3>
+            <div class="job-ctx">Your Naukri credentials are used only to log in for this session — never stored.</div>
+            <input type="email" id="start-email" placeholder="Naukri account email" autocomplete="username">
+            <input type="password" id="start-password" placeholder="Naukri password" autocomplete="current-password">
+            <input type="number" id="start-jobs-target" placeholder="Number of jobs to apply to" value="10" min="1">
+            <div class="job-ctx" id="start-error" style="color: var(--red);"></div>
+            <div class="actions">
+                <button class="secondary" id="start-cancel-btn">Cancel</button>
+                <button class="primary" id="start-confirm-btn">Start</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- New Question Detected -->
+    <div class="modal-overlay" id="question-modal-overlay">
+        <div class="modal">
+            <span class="badge">New Question Detected — Your Input Required</span>
+            <h3 id="question-text">—</h3>
+            <div class="job-ctx" id="question-job-ctx"></div>
+            <div class="candidates" id="question-candidates"></div>
+            <input type="text" id="question-answer-input" placeholder="Type the correct answer…">
+            <div class="actions">
+                <button class="secondary" id="question-skip-btn">Skip This Job</button>
+                <button class="primary" id="question-submit-btn">Submit Answer</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
