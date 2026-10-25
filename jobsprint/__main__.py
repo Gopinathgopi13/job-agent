@@ -13,6 +13,7 @@ examples:
   python -m jobsprint --apply
   python -m jobsprint --apply --jobs 25
   python -m jobsprint --apply --email you@example.com
+  python -m jobsprint --apply --portal hirist
   python -m jobsprint --train
   python -m jobsprint --edit-answers
 """
@@ -21,7 +22,7 @@ examples:
 def build_parser():
     parser = argparse.ArgumentParser(
         prog="jobsprint",
-        description="JobSprint — apply to Naukri jobs automatically.",
+        description="JobSprint — apply to Naukri or Hirist jobs automatically.",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=EPILOG,
     )
@@ -31,8 +32,10 @@ def build_parser():
                         help="Rebuild the question-answer store from config.json and exit")
     parser.add_argument("--edit-answers", action="store_true",
                         help="Review, fix, or delete answers the bot has learned")
+    parser.add_argument("--portal", default=None, choices=["naukri", "hirist"],
+                        help="Job portal to apply on (otherwise you're asked)")
     parser.add_argument("--email", default=None,
-                        help="Naukri email (otherwise you're asked, and it's remembered)")
+                        help="Account email for the chosen portal (otherwise you're asked, and it's remembered)")
     parser.add_argument("--jobs", type=int, default=0,
                         help="How many jobs to apply to (skips the prompt)")
     parser.add_argument("--resume", default="",
@@ -41,7 +44,7 @@ def build_parser():
 
 
 def main():
-    banner()
+    banner("Job applications, on autopilot")
     args = build_parser().parse_args()
 
     if args.train:

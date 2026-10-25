@@ -34,6 +34,7 @@ class KBStore:
             self._conn.executescript(f.read())
         self._conn.commit()
         self._migrate_question_log_decisions()
+        self._migrate_application_site()
         self._corpus_cache = None
         if profile is not None:
             self.sync_seeds(profile)
@@ -81,6 +82,15 @@ class KBStore:
             CREATE INDEX IF NOT EXISTS idx_question_log_created ON kb_question_log(created_at);
             """
         )
+        self._conn.commit()
+
+    def _migrate_application_site(self):
+        columns = {
+            row[1] for row in self._conn.execute("PRAGMA table_info(applications)").fetchall()
+        }
+        if "site" in columns:
+            return
+        self._conn.execute("ALTER TABLE applications ADD COLUMN site TEXT")
         self._conn.commit()
 
     # ── seeding ────────────────────────────────────────────────
@@ -294,14 +304,15 @@ class KBStore:
             self._conn.execute(
                 """INSERT OR REPLACE INTO applications
                    (datetime, company, job_role, experience, salary, posted_date,
-                    naukri_url, external_url, application_type, status)
-                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                    naukri_url, external_url, application_type, status, site)
+                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
                 (
                     record.get("datetime", _now()), record.get("company"),
                     record.get("job_role"), record.get("experience"),
                     record.get("salary"), record.get("posted_date"),
                     record.get("naukri_url"), record.get("external_url"),
                     record["application_type"], record["status"],
+                    record.get("site") or "",
                 ),
             )
             self._conn.commit()

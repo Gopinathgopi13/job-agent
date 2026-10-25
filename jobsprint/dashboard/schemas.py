@@ -6,6 +6,7 @@ from pydantic import BaseModel, Field
 class SessionStartRequest(BaseModel):
     email: str
     password: str
+    portal: str = "naukri"
     jobs_target: Optional[int] = None
     role: Optional[str] = None
     location: Optional[str] = None

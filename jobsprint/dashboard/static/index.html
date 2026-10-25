@@ -153,13 +153,13 @@
                     <table class="data-table" id="applications-table">
                         <thead>
                             <tr>
-                                <th>Date &amp; Time</th><th>Company</th><th>Job Role</th>
+                                <th>Date &amp; Time</th><th>Portal</th><th>Company</th><th>Job Role</th>
                                 <th>Experience</th><th>Salary/CTC</th><th>Type</th>
                                 <th>Status</th><th>Link</th>
                             </tr>
                         </thead>
                         <tbody id="applications-tbody">
-                            <tr><td colspan="8" class="placeholder">No applications yet.</td></tr>
+                            <tr><td colspan="9" class="placeholder">No applications yet.</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -247,9 +247,14 @@
     <div class="modal-overlay" id="start-modal-overlay">
         <div class="modal">
             <h3>Start Applying</h3>
-            <div class="job-ctx">Your Naukri credentials are used only to log in for this session — never stored.</div>
-            <input type="email" id="start-email" placeholder="Naukri account email" autocomplete="username">
-            <input type="password" id="start-password" placeholder="Naukri password" autocomplete="current-password">
+            <div class="job-ctx">Credentials are used only to log in for this session — never stored.</div>
+            <label for="start-portal">Portal</label>
+            <select id="start-portal">
+                <option value="naukri">Naukri</option>
+                <option value="hirist">Hirist</option>
+            </select>
+            <input type="email" id="start-email" placeholder="Account email" autocomplete="username">
+            <input type="password" id="start-password" placeholder="Password" autocomplete="current-password">
             <input type="number" id="start-jobs-target" placeholder="Number of jobs to apply to" value="10" min="1">
             <div class="job-ctx" id="start-error" style="color: var(--red);"></div>
             <div class="actions">

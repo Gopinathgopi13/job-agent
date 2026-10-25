@@ -51,11 +51,14 @@ def start_session(body: SessionStartRequest, request: Request):
     orchestrator = request.app.state.orchestrator
     if orchestrator is None:
         raise HTTPException(500, "Session orchestrator is not configured.")
-    ok, message = orchestrator.start(
-        email=body.email, password=body.password, jobs_target=body.jobs_target,
-        role=body.role, location=body.location, experience=body.experience,
-        job_age=body.job_age,
-    )
+    try:
+        ok, message = orchestrator.start(
+            email=body.email, password=body.password, jobs_target=body.jobs_target,
+            role=body.role, location=body.location, experience=body.experience,
+            job_age=body.job_age, portal=body.portal,
+        )
+    except ValueError as e:
+        raise HTTPException(400, str(e)) from e
     if not ok:
         raise HTTPException(409, message)
     return {"ok": True, "message": message}

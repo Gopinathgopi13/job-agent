@@ -5,7 +5,7 @@ run an auto-apply session, and review what the bot has learned.
 import json
 
 from .. import paths
-from ..automation.naukri import NaukriBot
+from ..automation.portals import PORTALS, create_bot, normalize_portal
 from ..knowledge.store import KBStore
 from ..preferences.profile import CONFIG_PATH, ProfileStore, job_roles
 from ..preferences.store import PreferencesStore
@@ -108,8 +108,11 @@ def run_apply(args):
 
     # ── 1. who ─────────────────────────────────────────────────────
     step(1, TOTAL_STEPS, "Sign in", "👤")
-    email = resolve_email(args.email)
-    password = resolve_password()
+    portal = normalize_portal(
+        args.portal or choose("Job portal:", [(info["label"], key) for key, info in PORTALS.items()])
+    )
+    email = resolve_email(args.email, portal)
+    password = resolve_password(portal)
 
     # ── 2. what ────────────────────────────────────────────────────
     step(2, TOTAL_STEPS, "What to search for", "🎯")
@@ -151,6 +154,7 @@ def run_apply(args):
             ("Experience", "Fresher" if experience == 0 else f"{experience} year{'s' if experience > 1 else ''}"),
             ("Location", location or "Anywhere"),
             ("Target", f"{target} application{'s' if target != 1 else ''}"),
+            ("Portal", PORTALS[portal]["label"]),
             ("Account", email),
             ("", ""),
             ("Total experience", f"{profile.get('Total experience') or '—'} yrs"),
@@ -180,7 +184,9 @@ def run_apply(args):
         resume = args.resume or profile.get("Resume path", "")
 
     tracker = ExcelTracker(paths.EXCEL_PATH)
-    bot = NaukriBot(
+    label = PORTALS[portal]["label"]
+    bot = create_bot(
+        portal,
         email=email,
         password=password,
         username=email,
@@ -196,7 +202,7 @@ def run_apply(args):
     bot.init_browser()
     if not bot.login():
         alert(
-            "Couldn't confirm the sign-in. Check the password, and whether Naukri asked for "
+            f"Couldn't confirm the sign-in. Check the password, and whether {label} asked for "
             "an OTP or captcha in the browser, then try again.",
             "Login failed",
         )
@@ -227,8 +233,8 @@ def run_apply(args):
 
     if bot.quota_exceeded:
         alert(
-            "Naukri says your application limit is used up, so the session "
-            "stopped early. Run it again tomorrow.",
+            f"{label} stopped the session early — the apply-click cap was hit "
+            "or the site refused further applications. Try again later.",
             "Daily apply limit reached",
             border=WARN,
         )
@@ -239,7 +245,7 @@ def run_apply(args):
     if bot.ignored_count:
         details.append(f"{bot.ignored_count} ignored by your skip lists in config.json")
     result(
-        f"{applied} of {target} applications submitted on Naukri via Easy Apply",
+        f"{applied} of {target} applications submitted on {label}",
         "Session complete" if applied else "Nothing applied to",
         border=OK if applied else WARN,
         detail="\n".join(details) or None,
@@ -256,8 +262,8 @@ def _print_session_report(records):
         if r["application_type"] == "external":
             return f"[{BAD}]✗ Company site[/{BAD}]"
         if r["status"] == "Submitted":
-            return f"[{OK}]✓ Easy Apply[/{OK}]"
-        return f"[{WARN}]? Easy Apply (unconfirmed)[/{WARN}]"
+            return f"[{OK}]✓ Applied[/{OK}]"
+        return f"[{WARN}]? Apply (unconfirmed)[/{WARN}]"
 
     rows = [
         (
@@ -275,7 +281,7 @@ def _print_session_report(records):
         rows,
         title="Session report",
     )
-    note("✓ applied on Naukri · ? submitted but no confirmation seen · ✗ careers page only, NOT applied")
+    note("✓ applied on the portal · ? submitted but no confirmation seen · ✗ careers page only, NOT applied")
     note(f"Also saved to {paths.EXCEL_PATH}")
 
 
@@ -336,6 +342,7 @@ def show_usage():
         [
             ("jobsprint.bat  /  ./jobsprint.sh", "One click: refresh, sign in, apply"),
             ("python -m jobsprint --apply", "Same thing, from an activated venv"),
+            ("python -m jobsprint --apply --portal hirist", "Apply on Hirist instead of Naukri"),
             ("python -m jobsprint --apply --jobs 25", "Skip the 'how many' question"),
             ("python -m jobsprint --train", "Rebuild answers from config.json"),
             ("python -m jobsprint --edit-answers", "Review or fix what it has learned"),

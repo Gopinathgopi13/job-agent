@@ -327,6 +327,11 @@ button.icon-btn.danger:hover { color: var(--red); border-color: var(--red); }
 }
 .modal h3 { margin: 0 0 6px; font-size: 16px; }
 .modal .job-ctx { color: var(--text-dim); font-size: 12px; margin-bottom: 16px; }
+.modal label { display: block; font-size: 12px; color: var(--text-dim); margin-bottom: 6px; }
+.modal select,
+.modal input[type="email"],
+.modal input[type="password"],
+.modal input[type="number"],
 .modal input[type="text"] {
     width: 100%;
     background: var(--bg-elevated);

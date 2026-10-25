@@ -34,7 +34,8 @@ CREATE TABLE IF NOT EXISTS applications (
     naukri_url TEXT UNIQUE,
     external_url TEXT,
     application_type TEXT NOT NULL CHECK(application_type IN ('direct', 'external', 'skipped')),
-    status TEXT NOT NULL
+    status TEXT NOT NULL,
+    site TEXT
 );
 
 CREATE INDEX IF NOT EXISTS idx_question_log_created ON kb_question_log(created_at);

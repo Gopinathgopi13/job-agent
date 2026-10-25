@@ -135,6 +135,7 @@ $("#start-cancel-btn").addEventListener("click", () => startOverlay.classList.re
 $("#start-confirm-btn").addEventListener("click", async () => {
     const email = $("#start-email").value.trim();
     const password = $("#start-password").value;
+    const portal = $("#start-portal").value || "naukri";
     const jobsTarget = parseInt($("#start-jobs-target").value, 10) || 10;
     if (!email || !password) {
         $("#start-error").textContent = "Email and password are required.";
@@ -144,7 +145,7 @@ $("#start-confirm-btn").addEventListener("click", async () => {
         const res = await fetch("/api/session/start", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email, password, jobs_target: jobsTarget }),
+            body: JSON.stringify({ email, password, jobs_target: jobsTarget, portal }),
         });
         const body = await res.json();
         if (!res.ok) throw new Error(body.detail || "Failed to start session.");
@@ -495,13 +496,14 @@ async function loadApplications() {
 function renderApplicationsTable(rows) {
     const tbody = $("#applications-tbody");
     if (!rows.length) {
-        tbody.innerHTML = '<tr><td colspan="8" class="placeholder">No applications yet.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="9" class="placeholder">No applications yet.</td></tr>';
         return;
     }
     tbody.innerHTML = rows.map((r) => {
         const link = r.external_url || r.naukri_url || "";
         return `<tr>
             <td>${escapeHtml(r.datetime)}</td>
+            <td>${escapeHtml(r.site || "")}</td>
             <td>${escapeHtml(r.company)}</td>
             <td>${escapeHtml(r.job_role)}</td>
             <td>${escapeHtml(r.experience)}</td>

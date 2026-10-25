@@ -15,7 +15,7 @@ from openpyxl import Workbook, load_workbook
 COLUMNS = [
     "Date & Time", "Company", "Job Role", "Experience", "Salary/CTC",
     "Posted Date", "Naukri URL", "External Application URL",
-    "Application Type", "Status",
+    "Application Type", "Status", "Portal",
 ]
 
 SUMMARY_SHEET = "Daily Summary"
@@ -57,10 +57,14 @@ class ExcelTracker:
             record.get("salary", ""), record.get("posted_date", ""),
             record.get("naukri_url", ""), record.get("external_url", ""),
             record.get("application_type", ""), record.get("status", ""),
+            record.get("site", ""),
         ]
         with self._lock:
             wb = load_workbook(self.path)
             ws = wb["Applications"]
+            headers = [cell.value for cell in ws[1]]
+            if "Portal" not in headers:
+                ws.cell(row=1, column=len(headers) + 1, value="Portal")
             ws.append(row)
             wb.save(self.path)
 

@@ -5,7 +5,7 @@ authoritative answer (not just whatever the WebSocket happened to push).
 
 import threading
 
-from ..automation.naukri import NaukriBot
+from ..automation.portals import create_bot, normalize_portal
 from ..preferences import store as prefs_defaults
 from ..preferences.profile import job_roles
 
@@ -101,7 +101,7 @@ class SessionOrchestrator:
             return self._thread is not None and self._thread.is_alive()
 
     def start(self, email, password, username=None, jobs_target=None,
-              role=None, location=None, experience=None, job_age=None):
+              role=None, location=None, experience=None, job_age=None, portal="naukri"):
         with self._lock:
             if self._thread is not None and self._thread.is_alive():
                 return False, "A session is already running."
@@ -125,7 +125,8 @@ class SessionOrchestrator:
             from ..resume.parser import extract_skills_from_path
             resume_skills = extract_skills_from_path(profile.get("Resume path", ""))
 
-            self._bot = NaukriBot(
+            self._bot = create_bot(
+                normalize_portal(portal),
                 email=email, password=password, username=username, number=jobs_target,
                 user_info=profile, pending_registry=self.pending_registry,
                 event_bus=self.event_bus, on_application_recorded=self._handle_application_recorded,
