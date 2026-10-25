@@ -1,8 +1,8 @@
 # JobSprint
 
-**Applies to Naukri.com jobs for you, automatically.**
+**Applies to Naukri and Hirist jobs for you, automatically.**
 
-Tell it a role and how many years you have. It opens a browser, signs into your Naukri account, runs the search, opens each result, clicks Apply, fills the form, answers the chatbot's questions from your config, and moves on to the next one.
+Tell it a role and how many years you have. It opens a browser, signs into your selected portal account, runs the search, opens each result, clicks Apply, fills the form, answers the chatbot's questions from your config, and moves on to the next one.
 
 Runs on **Windows** and **macOS** (and Linux). Created by **Gopinath**.
 
@@ -45,7 +45,7 @@ If it's missing, get it from [python.org/downloads](https://www.python.org/downl
 
 ```bat
 git clone <this-repo-url>
-cd jobautobot
+cd <repo-name>
 setup\install.bat
 ```
 
@@ -53,7 +53,7 @@ setup\install.bat
 
 ```bash
 git clone <this-repo-url>
-cd jobautobot
+cd <repo-name>
 chmod +x setup/install.sh jobsprint.sh
 ./setup/install.sh
 ```
@@ -150,14 +150,14 @@ A few things worth knowing:
 - **`Resume path`** must be a full path to a PDF. On Windows use forward slashes (`C:/Users/...`) or doubled backslashes.
 - Fields you leave blank are **asked** during a run rather than submitted empty.
 
-Your Naukri **password is never stored** — anywhere. It's typed fresh each run. Your email is remembered in `.env` so you don't retype it.
+Your portal **password is never stored** — anywhere. It's typed fresh each run. Your email is remembered in `.env` so you don't retype it.
 
 ---
 
 ## How it works
 
 ```
-   your config.json                    Naukri.com
+   your config.json              Naukri or Hirist
          │                                  │
          ▼                                  ▼
    ┌───────────┐   role + experience   ┌──────────┐
@@ -227,6 +227,7 @@ Run these from an activated virtual environment (`venv\Scripts\activate` on Wind
 |---|---|
 | `jobsprint.bat` / `./jobsprint.sh` | **Start the bot.** One click: set up, sign in, apply |
 | `python -m jobsprint --apply` | The same thing, from an activated venv |
+| `python -m jobsprint --apply --portal hirist` | Apply on Hirist instead of Naukri |
 | `python -m jobsprint --apply --jobs 25` | Skip the "how many jobs" question |
 | `python -m jobsprint --apply --email you@example.com` | Skip the account picker |
 | `python -m jobsprint --train` | Rebuild the question store from `config.json` |
@@ -270,6 +271,9 @@ jobsprint/
 │   └── flows.py                  train / apply / edit-answers
 ├── automation/               ← the browser work
 │   ├── naukri.py                 search, apply, chatbot handling
+│   ├── hirist.py                 Hirist search and apply handling
+│   ├── listing.py                shared listing search and apply loop
+│   ├── portals.py                portal selection and bot factory
 │   └── browser.py                first-run Chromium setup
 ├── knowledge/                ← how questions get answered
 │   ├── skills.py                 the pattern reader
@@ -350,4 +354,4 @@ sudo apparmor_parser -r /etc/apparmor.d/playwright-chromium
 
 [GNU GPL v3](LICENSE).
 
-> Use this on your own Naukri account, at a sensible pace. You're responsible for what gets submitted under your name — keep `config.json` accurate.
+> Use this on your own job-portal account, at a sensible pace. You're responsible for what gets submitted under your name — keep `config.json` accurate.
